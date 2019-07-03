@@ -94,17 +94,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
         @Override
         public void onClick(View v) {
-            // get tweet position
             int position = getAdapterPosition();
             // ensure position valid (exists in view)
             if (position != RecyclerView.NO_POSITION) {
-                // get movie at position. doesn't work if class is static
+                // get tweet at position. doesn't work if class is static
                 Tweet tweet = mTweets.get(position);
-                // create intent to display MovieDetailsActivity
                 Intent intent = new Intent(context, TweetDetails.class);
-                // pass movie as extra serialized via Parcels.wrap(). use its short name as key
                 intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweet));
-                // show activity
                 context.startActivity(intent);
             }
         }
