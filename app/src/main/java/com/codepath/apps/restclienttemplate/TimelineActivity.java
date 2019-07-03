@@ -40,7 +40,7 @@ public class TimelineActivity extends AppCompatActivity {
         // handle clicks on action bar items
         switch (item.getItemId()) {
             case R.id.miCompose:
-                composeTweet();
+                composeTweet("");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -73,7 +73,7 @@ public class TimelineActivity extends AppCompatActivity {
         // initialize ArrayList (data source)
         tweets = new ArrayList<>();
         // construct adapter from data source
-        tweetAdapter = new TweetAdapter(tweets);
+        tweetAdapter = new TweetAdapter(this, tweets);
         // RecyclerView setup (layout manager, use adapter)
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(linearLayoutManager);
@@ -152,8 +152,9 @@ public class TimelineActivity extends AppCompatActivity {
     // create request code for compose activity
     private final int COMPOSE_CODE = 1;
     // call compose activity using intents
-    public void composeTweet() {
+    public void composeTweet(String tweetContent) {
         Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+        i.putExtra("content", tweetContent);
         startActivityForResult(i, COMPOSE_CODE);
     }
 
@@ -176,7 +177,7 @@ public class TimelineActivity extends AppCompatActivity {
         }
         else {
             Tweet oldest = tweets.get(tweets.size() - 1);
-            return oldest.getUid();
+            return oldest.uid;
         }
     }
 

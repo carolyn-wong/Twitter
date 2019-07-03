@@ -1,8 +1,10 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +24,13 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
     private List<Tweet> mTweets;
+    private Activity mContext;
     // context defined as global variable so Glide in onBindViewHolder has access
     Context context;
 
     // pass Tweets array in constructor
-    public TweetAdapter(List<Tweet> tweets) {
+    public TweetAdapter(Activity context, List<Tweet> tweets) {
+        mContext = context;
         mTweets = tweets;
     }
 
@@ -55,7 +59,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         String formattedCreatedAt = TimeFormatter.getTimeDifference(tweet.createdAt);
 
         // populate views according to data
-        holder.tvUsername.setText(tweet.user.name);
+        holder.tvUserName.setText(tweet.user.name);
+        holder.tvScreenName.setText(tweet.user.screenName);
         holder.tvBody.setText(tweet.body);
         holder.tvCreatedAt.setText(formattedCreatedAt);
 
@@ -75,9 +80,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public ImageView ivProfileImage;
-        public TextView tvUsername;
+        public TextView tvUserName;
+        public TextView tvScreenName;
         public TextView tvBody;
         public TextView tvCreatedAt;
+        public ImageView ivReply;
+        public ImageView ivLike;
+        public ImageView ivRetweet;
 
         // constructor takes in inflated layout
         public ViewHolder(View itemView) {
@@ -85,11 +94,37 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
             // perform findViewById lookups
             ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
-            tvUsername = (TextView) itemView.findViewById(R.id.tvUserName);
+            tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
+            tvScreenName = (TextView) itemView.findViewById(R.id.tvScreenName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvCreatedAt = (TextView) itemView.findViewById(R.id.tvCreatedAt);
+            ivReply = (ImageView) itemView.findViewById(R.id.ivReply);
+            ivLike = (ImageView) itemView.findViewById(R.id.ivLike);
+            ivRetweet = (ImageView) itemView.findViewById(R.id.ivRetweet);
 
             itemView.setOnClickListener(this);
+            ivReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // call composeTweet method from TimelineActivity replying to user
+                    if(mContext instanceof TimelineActivity) {
+                        String userReply = String.format("@%s", tvScreenName.getText().toString());
+                        ((TimelineActivity) mContext).composeTweet(userReply);
+                    }
+                }
+            });
+            ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("TIMELINE LIKE CLICK", "LIKE");
+                }
+            });
+            ivRetweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("TIMELINE RETWEET CLICK", "RETWEET");
+                }
+            });
         }
 
         @Override

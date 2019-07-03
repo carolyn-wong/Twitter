@@ -41,6 +41,8 @@ public class ComposeActivity extends AppCompatActivity {
         etCompose = (EditText) findViewById(R.id.etCompose);
         tvCharCount = (TextView) findViewById(R.id.tvCharCount);
 
+        String composeText = getIntent().getStringExtra("content");
+        etCompose.setText(composeText);
         // set TextWatcher for character count (total character limit enforced in xml file)
         etCompose.addTextChangedListener(new TextWatcher() {
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

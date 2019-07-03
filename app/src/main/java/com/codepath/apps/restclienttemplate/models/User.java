@@ -32,7 +32,4 @@ public class User {
         return name;
     }
 
-    public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
 }

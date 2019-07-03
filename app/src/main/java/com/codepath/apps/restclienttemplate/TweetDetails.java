@@ -3,13 +3,18 @@ package com.codepath.apps.restclienttemplate;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONObject;
 import org.parceler.Parcels;
+
+import cz.msebera.android.httpclient.Header;
 
 public class TweetDetails extends AppCompatActivity {
 
@@ -20,12 +25,16 @@ public class TweetDetails extends AppCompatActivity {
     private ImageView ivProfileImage;
     private ImageView ivRetweet;
     private ImageView ivLike;
+    TwitterClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet_details);
 
+        client = TwitterApp.getRestClient(this);
+
+        // find views
         tvUserName = (TextView) findViewById(R.id.tvUserName);
         tvCreatedAt = (TextView) findViewById(R.id.tvCreatedAt);
         tvBody = (TextView) findViewById(R.id.tvBody);
@@ -37,14 +46,77 @@ public class TweetDetails extends AppCompatActivity {
         tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra(Tweet.class.getSimpleName()));
         Log.d("TweetDetailsActivity", "Showing details for tweet");
 
-        tvUserName.setText(tweet.getUser().getName());
+        // set views
+        tvUserName.setText(tweet.user.name);
         tvCreatedAt.setText(tweet.getCreatedAt());
-        tvBody.setText(tweet.getBody());
+        tvBody.setText(tweet.body);
 
         Glide.with(getBaseContext())
-                .load(tweet.getUser().getProfileImageUrl())
+                .load(tweet.user.profileImageUrl)
                 .into(ivProfileImage);
 
+        ivRetweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // check retweet status - if already retweeted, change image and call "unretweet"
+                // otherwise, change image and call "retweet"
+                if (ivRetweet.isSelected()) {
+                    client.unRetweet(tweet.strId, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            ivRetweet.setSelected(false);
+                        }
 
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    });
+                }
+                else {
+                    client.Retweet(tweet.strId, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            ivRetweet.setSelected(true);
+                        }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    });
+                }
+            }
+        });
+
+        ivLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ivLike.isSelected()) {
+                    client.unlikeTweet(tweet.strId, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            ivLike.setSelected(false);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    });
+                }
+                else {
+                    client.likeTweet(tweet.strId, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            ivLike.setSelected(true);
+                        }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    });
+                }
+            }
+        });
     }
 }
