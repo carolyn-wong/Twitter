@@ -24,9 +24,6 @@ public class TwitterClient extends OAuthBaseClient {
 	public static final BaseApi REST_API_INSTANCE = TwitterApi.instance(); // Change this
 	public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
 
-    // TODO - find way to access api key in secrets.xml file
-	public static final String REST_CONSUMER_KEY = "csWpDJL8EmCmKMUtUbyVxvLki";       // Change this
-	public static final String REST_CONSUMER_SECRET = "10XTdLKuwV3KImTPRUgk5XvJ5YHRXsH2znLJaYqKVAiSVRBkeW"; // Change this
 
 	// Landing page to indicate the OAuth flow worked in case Chrome for Android 25+ blocks navigation back to the app.
 	public static final String FALLBACK_URL = "https://codepath.github.io/android-rest-client-template/success.html";
@@ -37,8 +34,8 @@ public class TwitterClient extends OAuthBaseClient {
 	public TwitterClient(Context context) {
 		super(context, REST_API_INSTANCE,
 				REST_URL,
-				REST_CONSUMER_KEY,
-				REST_CONSUMER_SECRET,
+				context.getResources().getString(R.string.api_key),
+				context.getResources().getString(R.string.api_secret_key),
 				String.format(REST_CALLBACK_URL_TEMPLATE, context.getString(R.string.intent_host),
 						context.getString(R.string.intent_scheme), context.getPackageName(), FALLBACK_URL));
 	}
