@@ -36,4 +36,14 @@ public class Tweet {
     public long getUid() {
         return uid;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getCreatedAt() {
+        // convert timestamp to relative time
+        String formattedCreatedAt = TimeFormatter.getTimeDifference(createdAt);
+        return formattedCreatedAt;
+    }
 }
