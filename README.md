@@ -15,16 +15,16 @@ The following **required** functionality is completed:
 * [x] User can compose a new tweet (4 points)
 
 The following **stretch** features are implemented:
-* [ ] While composing a tweet, user can see a character counter with characters remaining for tweet out of 280.
-* [ ] User can refresh timeline of tweets by pulling down to refresh (i.e pull-to-refresh).
+* [x] While composing a tweet, user can see a character counter with characters remaining for tweet out of 280.
+* [x] User can refresh timeline of tweets by pulling down to refresh (i.e pull-to-refresh).
 * [ ] Improve the user interface and theme the app to feel "twitter branded" with colors and styles.
 * [ ] When any background or network task is happening, user sees an indeterminate progress indicator.
 * [ ] User can "reply" to any tweet from their home timeline.
 * [ ] User can click on a tweet to be taken to a "detail view" of that tweet.
 * [ ] User can see embedded image media within a tweet on list or detail view.
-* [ ] User can view more tweets as they scroll with infinite pagination. Number of tweets is unlimited. Refer to the infinite pagination conceptual guide for more details.
+* [x] User can view more tweets as they scroll with infinite pagination. Number of tweets is unlimited. Refer to the infinite pagination conceptual guide for more details.
 * [ ] Compose activity is replaced with a modal overlay.
-* [ ] Links in tweets are clickable and will launch the web browser.
+* [x] Links in tweets are clickable and will launch the web browser.
 * [x] Use Parcelable instead of Serializable leveraging the popular Parceler library.
 * [ ] Replace all icon drawables and other static image assets with vector drawables where appropriate.
 * [ ] User can view following / followers list through any profile they view.
@@ -45,6 +45,8 @@ Here's a walkthrough of implemented user stories:
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
+
+Had to create a new git repository because of many git errors in pushing code.
 
 ## License
 
