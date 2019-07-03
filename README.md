@@ -20,7 +20,7 @@ The following **stretch** features are implemented:
 * [ ] Improve the user interface and theme the app to feel "twitter branded" with colors and styles.
 * [ ] When any background or network task is happening, user sees an indeterminate progress indicator.
 * [ ] User can "reply" to any tweet from their home timeline.
-* [ ] User can click on a tweet to be taken to a "detail view" of that tweet.
+* [x] User can click on a tweet to be taken to a "detail view" of that tweet.
 * [ ] User can see embedded image media within a tweet on list or detail view.
 * [x] User can view more tweets as they scroll with infinite pagination. Number of tweets is unlimited. Refer to the infinite pagination conceptual guide for more details.
 * [ ] Compose activity is replaced with a modal overlay.
