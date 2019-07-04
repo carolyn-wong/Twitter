@@ -60,7 +60,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
 
         // populate views according to data
         holder.tvUserName.setText(tweet.user.name);
-        holder.tvScreenName.setText(tweet.user.screenName);
+        holder.tvScreenName.setText(String.format("@%s", tweet.user.screenName));
         holder.tvBody.setText(tweet.body);
         holder.tvCreatedAt.setText(formattedCreatedAt);
 
