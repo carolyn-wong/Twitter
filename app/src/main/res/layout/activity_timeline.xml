@@ -32,10 +32,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@android:color/transparent"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:indeterminateTint="@color/twitter_blue"
+            android:indeterminateTintMode="src_in"/>
 
     </android.support.constraint.ConstraintLayout>
 
