@@ -47,16 +47,13 @@ public class TimelineActivity extends AppCompatActivity {
         }
     }
 
-    // initialize client, adapter, and views
+    // initialize client, adapter, views, scroll listener
     TwitterClient client;
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
     private SwipeRefreshLayout swipeContainer;
-
-    // variable for endless scroll listener
     private EndlessRecyclerViewScrollListener scrollListener;
-    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,16 +63,14 @@ public class TimelineActivity extends AppCompatActivity {
 
         // initialize twitter client
         client = TwitterApp.getRestClient(this);
-        // find RecyclerView
         rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
-        // initialize ArrayList (data source)
+        // initialize data source
         tweets = new ArrayList<>();
         // construct adapter from data source
         tweetAdapter = new TweetAdapter(this, tweets);
-        // RecyclerView setup (layout manager, use adapter)
+        // RecyclerView setup
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(linearLayoutManager);
-        // set adapter
         rvTweets.setAdapter(tweetAdapter);
 
         populateTimeline(0L);
@@ -91,9 +86,8 @@ public class TimelineActivity extends AppCompatActivity {
         // add endless scroll listener to RecyclerView
         rvTweets.addOnScrollListener(scrollListener);
 
-        // look up swipe container view
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         // set up refresh listener that triggers new data loading
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -109,29 +103,22 @@ public class TimelineActivity extends AppCompatActivity {
 
     // populate Twitter timeline
     private void populateTimeline(final Long maxId) {
-        // create anonymous class to handle response from network
-
         final ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
         client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                // clear out old items before appending in new ones
                 progressBar.setVisibility(View.INVISIBLE);
+
+                // if opening app, clear out old items
                 if(maxId == 0L) {
                     tweetAdapter.clear();
                 }
-
-                // iterate through JSON array response
-                // for each entry, deserialize JSON object
                 for(int i = 0; i < response.length(); i++) {
                     try {
-                        // convert each object to Tweet model
                         Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
-                        // add Tweet model to data source
                         tweets.add(tweet);
-                        // notify adapter that item was added
                         tweetAdapter.notifyItemInserted(tweets.size() - 1);
                     } catch(JSONException e) {
                         e.printStackTrace();
@@ -139,7 +126,6 @@ public class TimelineActivity extends AppCompatActivity {
                 }
                 // on successful reload, signal that refresh has completed
                 swipeContainer.setRefreshing(false);
-//                progressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -150,10 +136,8 @@ public class TimelineActivity extends AppCompatActivity {
         });
     }
 
-    // Compose Activity
-    // create request code for compose activity
+    // compose activity
     private final int COMPOSE_CODE = 1;
-    // call compose activity using intents
     public void composeTweet(String tweetContent) {
         Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
         i.putExtra("content", tweetContent);
@@ -162,7 +146,6 @@ public class TimelineActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // new composed tweet
         if(resultCode == RESULT_OK && requestCode == COMPOSE_CODE) {
             Tweet newTweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra(Tweet.class.getSimpleName()));
             tweets.add(0, newTweet);

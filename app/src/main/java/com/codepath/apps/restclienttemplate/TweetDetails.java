@@ -58,8 +58,7 @@ public class TweetDetails extends AppCompatActivity {
         ivRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // check retweet status - if already retweeted, change image and call "unretweet"
-                // otherwise, change image and call "retweet"
+                // check retweet status
                 if (ivRetweet.isSelected()) {
                     client.unRetweet(tweet.strId, new JsonHttpResponseHandler() {
                         @Override
@@ -91,6 +90,7 @@ public class TweetDetails extends AppCompatActivity {
         ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // check like status
                 if (ivLike.isSelected()) {
                     client.unlikeTweet(tweet.strId, new JsonHttpResponseHandler() {
                         @Override

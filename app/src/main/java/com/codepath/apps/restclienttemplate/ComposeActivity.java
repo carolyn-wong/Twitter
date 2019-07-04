@@ -1,7 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -54,13 +53,11 @@ public class ComposeActivity extends AppCompatActivity {
                     int charsLeft = charLimit - s.length();
                     tvCharCount.setText(String.valueOf(charsLeft));
                     // if 0 chars remaining, set charCount to red
-                    // TODO - don't hardcode text color in here
-                    // TODO - also maybe don't need so many methods in the TextWatcher??
                     if(charsLeft == 0) {
-                        tvCharCount.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                        tvCharCount.setTextColor(getResources().getColor(R.color.medium_red));
                     }
                     else {
-                        tvCharCount.setTextColor(Color.parseColor("#657786"));
+                        tvCharCount.setTextColor(getResources().getColor(R.color.medium_gray));
                     }
                 }
 
@@ -72,15 +69,14 @@ public class ComposeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String composeText = etCompose.getText().toString();
+
                 client.sendTweet(composeText, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         try {
-                            // convert to Tweet model
+                            // send back to Timeline Activity
                             Tweet newTweet = Tweet.fromJSON(response);
-                            // create intent to send data back to TimelineActivity
                             Intent returnTweet = new Intent();
-                            // pass tweet as extra serialized via Parcels.wrap(), using short name as key
                             returnTweet.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(newTweet));
                             setResult(RESULT_OK, returnTweet);
                             finish();

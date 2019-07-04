@@ -11,13 +11,13 @@ public class Tweet {
     // attributes
     public String body; // text body of text
     public long uid; // database id of tweet
-    public String strId;
+    public String strId; //
     public User user; // user object of tweet
     public String createdAt; // timestamp of tweet
     public boolean retweeted;
     public boolean liked;
 
-    // no arguments, empty constructor required for Parceler
+    // empty constructor required for Parceler
     public Tweet() {}
 
     // deserialize JSON

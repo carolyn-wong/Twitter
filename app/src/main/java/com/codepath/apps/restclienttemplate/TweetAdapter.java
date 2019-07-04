@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.codepath.apps.restclienttemplate.models.TimeFormatter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.parceler.Parcels;
@@ -55,17 +54,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         // get data according to position
         Tweet tweet = mTweets.get(position);
 
-        // convert timestamp to relative time
-        String formattedCreatedAt = TimeFormatter.getTimeDifference(tweet.createdAt);
-
         // populate views according to data
         holder.tvUserName.setText(tweet.user.name);
         holder.tvScreenName.setText(String.format("@%s", tweet.user.screenName));
         holder.tvBody.setText(tweet.body);
-        holder.tvCreatedAt.setText(formattedCreatedAt);
+        holder.tvCreatedAt.setText(tweet.getCreatedAt());
 
         // TODO - get better resolution images by changing image link from "normal" to "bigger"
-        // load image using Glide
         Glide.with(context)
                 .load(tweet.user.profileImageUrl)
                 .bitmapTransform(new RoundedCornersTransformation(context, 10, 0))
@@ -92,7 +87,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         public ViewHolder(View itemView) {
             super(itemView);
 
-            // perform findViewById lookups
+            // findViewById lookups
             ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
             tvScreenName = (TextView) itemView.findViewById(R.id.tvScreenName);
@@ -106,9 +101,9 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             ivReply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // call composeTweet method from TimelineActivity replying to user
+                    // call composeTweet method from TimelineActivity
                     if(mContext instanceof TimelineActivity) {
-                        String userReply = String.format("@%s", tvScreenName.getText().toString());
+                        String userReply = String.format("%s", tvScreenName.getText().toString());
                         ((TimelineActivity) mContext).composeTweet(userReply);
                     }
                 }

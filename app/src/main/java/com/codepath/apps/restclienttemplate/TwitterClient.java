@@ -47,7 +47,7 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", 25); // specify number of items to come back
 		if(maxId == 0L) {
-			//
+			// don't do anything
 		} else {
 			params.put("max_id", maxId - 1); // idType and tweet id
 		}
