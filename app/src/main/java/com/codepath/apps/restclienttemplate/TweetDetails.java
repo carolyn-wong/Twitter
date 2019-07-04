@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,6 +21,7 @@ public class TweetDetails extends AppCompatActivity {
 
     private Tweet tweet;
     private TextView tvUserName;
+    private TextView tvScreenName;
     private TextView tvCreatedAt;
     private TextView tvBody;
     private ImageView ivProfileImage;
@@ -36,6 +38,7 @@ public class TweetDetails extends AppCompatActivity {
 
         // find views
         tvUserName = (TextView) findViewById(R.id.tvUserName);
+        tvScreenName = (TextView) findViewById(R.id.tvScreenName);
         tvCreatedAt = (TextView) findViewById(R.id.tvCreatedAt);
         tvBody = (TextView) findViewById(R.id.tvBody);
         ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
@@ -48,6 +51,7 @@ public class TweetDetails extends AppCompatActivity {
 
         // set views
         tvUserName.setText(tweet.user.name);
+        tvScreenName.setText(String.format("@%s", tweet.user.screenName));
         tvCreatedAt.setText(tweet.getCreatedAt());
         tvBody.setText(tweet.body);
 
@@ -58,11 +62,14 @@ public class TweetDetails extends AppCompatActivity {
         ivRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final ProgressBar progressBar = findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE);
                 // check retweet status
                 if (ivRetweet.isSelected()) {
                     client.unRetweet(tweet.strId, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            progressBar.setVisibility(View.INVISIBLE);
                             ivRetweet.setSelected(false);
                         }
 
@@ -76,6 +83,7 @@ public class TweetDetails extends AppCompatActivity {
                     client.Retweet(tweet.strId, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            progressBar.setVisibility(View.INVISIBLE);
                             ivRetweet.setSelected(true);
                         }
                         @Override
@@ -90,11 +98,14 @@ public class TweetDetails extends AppCompatActivity {
         ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final ProgressBar progressBar = findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE);
                 // check like status
                 if (ivLike.isSelected()) {
                     client.unlikeTweet(tweet.strId, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            progressBar.setVisibility(View.INVISIBLE);
                             ivLike.setSelected(false);
                         }
 
@@ -108,6 +119,7 @@ public class TweetDetails extends AppCompatActivity {
                     client.likeTweet(tweet.strId, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            progressBar.setVisibility(View.INVISIBLE);
                             ivLike.setSelected(true);
                         }
                         @Override

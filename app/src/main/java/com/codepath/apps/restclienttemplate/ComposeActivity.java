@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -69,10 +70,13 @@ public class ComposeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String composeText = etCompose.getText().toString();
+                final ProgressBar progressBar = findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE);
 
                 client.sendTweet(composeText, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        progressBar.setVisibility(View.INVISIBLE);
                         try {
                             // send back to Timeline Activity
                             Tweet newTweet = Tweet.fromJSON(response);
@@ -80,7 +84,6 @@ public class ComposeActivity extends AppCompatActivity {
                             returnTweet.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(newTweet));
                             setResult(RESULT_OK, returnTweet);
                             finish();
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
