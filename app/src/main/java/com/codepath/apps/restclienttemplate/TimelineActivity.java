@@ -162,7 +162,7 @@ public class TimelineActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
             if (requestCode == 1 || requestCode == 2) {
-                Tweet newTweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra(Tweet.class.getSimpleName()));
+                Tweet newTweet = (Tweet) Parcels.unwrap(data.getParcelableExtra(Tweet.class.getSimpleName()));
                 tweets.add(0, newTweet);
                 tweetAdapter.notifyItemInserted(0);
                 rvTweets.scrollToPosition(0);
