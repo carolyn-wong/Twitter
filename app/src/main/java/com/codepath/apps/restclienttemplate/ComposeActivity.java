@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,8 +42,14 @@ public class ComposeActivity extends AppCompatActivity {
         etCompose = (EditText) findViewById(R.id.etCompose);
         tvCharCount = (TextView) findViewById(R.id.tvCharCount);
 
-        String composeText = getIntent().getStringExtra("content");
-        etCompose.setText(composeText);
+        final int requestCode = getIntent().getIntExtra("requestCode", 0);
+        final long replyId = getIntent().getLongExtra("replyId", 0L);
+        // replying to a tweet
+        if (requestCode == 2) {
+            String composeText = getIntent().getStringExtra("content");
+            etCompose.setText(composeText);
+        }
+
         // set TextWatcher for character count (total character limit enforced in xml file)
         etCompose.addTextChangedListener(new TextWatcher() {
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -73,27 +80,55 @@ public class ComposeActivity extends AppCompatActivity {
                 final ProgressBar progressBar = findViewById(R.id.progressBar);
                 progressBar.setVisibility(View.VISIBLE);
 
-                client.sendTweet(composeText, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        try {
-                            // send back to Timeline Activity
-                            Tweet newTweet = Tweet.fromJSON(response);
-                            Intent returnTweet = new Intent();
-                            returnTweet.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(newTweet));
-                            setResult(RESULT_OK, returnTweet);
-                            finish();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                // regular composed tweet
+                if (requestCode == 1) {
+                    client.sendTweet(composeText, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            try {
+                                Log.i("COMPOSE", response.toString());
+                                // send back to Timeline Activity
+                                Tweet newTweet = Tweet.fromJSON(response);
+                                Intent returnTweet = new Intent();
+                                returnTweet.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(newTweet));
+                                setResult(RESULT_OK, returnTweet);
+                                finish();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                    }
-                });
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    });
+                }
+                // replying to a tweet
+                else {
+                    client.replyTweet(replyId, composeText, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            try {
+                                // send back to Timeline Activity
+                                Tweet newTweet = Tweet.fromJSON(response);
+                                Intent returnTweet = new Intent();
+                                returnTweet.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(newTweet));
+                                setResult(RESULT_OK, returnTweet);
+                                finish();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    });
+                }
             }
         });
     }

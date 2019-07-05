@@ -40,7 +40,7 @@ public class TimelineActivity extends AppCompatActivity {
         // handle clicks on action bar items
         switch (item.getItemId()) {
             case R.id.miCompose:
-                composeTweet("");
+                composeTweet();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -138,19 +138,35 @@ public class TimelineActivity extends AppCompatActivity {
 
     // compose activity
     private final int COMPOSE_CODE = 1;
-    public void composeTweet(String tweetContent) {
+    private final int REPLY_CODE = 2;
+
+    public void composeTweet() {
+        Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+        startActivityForResult(i, COMPOSE_CODE);
+    }
+
+    public void replyTweet(long replyId, String tweetContent) {
         Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
         i.putExtra("content", tweetContent);
-        startActivityForResult(i, COMPOSE_CODE);
+        i.putExtra("replyId", replyId);
+        startActivityForResult(i, REPLY_CODE);
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        intent.putExtra("requestCode", requestCode);
+        super.startActivityForResult(intent, requestCode);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK && requestCode == COMPOSE_CODE) {
-            Tweet newTweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra(Tweet.class.getSimpleName()));
-            tweets.add(0, newTweet);
-            tweetAdapter.notifyItemInserted(0);
-            rvTweets.scrollToPosition(0);
+        if(resultCode == RESULT_OK) {
+            if (requestCode == 1 || requestCode == 2) {
+                Tweet newTweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra(Tweet.class.getSimpleName()));
+                tweets.add(0, newTweet);
+                tweetAdapter.notifyItemInserted(0);
+                rvTweets.scrollToPosition(0);
+            }
         }
     }
 
