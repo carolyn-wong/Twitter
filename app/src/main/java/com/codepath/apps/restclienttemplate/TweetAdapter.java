@@ -59,6 +59,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         holder.tvScreenName.setText(String.format("@%s", tweet.user.screenName));
         holder.tvBody.setText(tweet.body);
         holder.tvCreatedAt.setText(tweet.getCreatedAt());
+        holder.ivReply.setTag(tweet.uid);
 
         // TODO - get better resolution images by changing image link from "normal" to "bigger"
         Glide.with(context)
@@ -101,10 +102,11 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
             ivReply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // call composeTweet method from TimelineActivity
-                    if(mContext instanceof TimelineActivity) {
+                // call composeTweet method from TimelineActivity
+                if(mContext instanceof TimelineActivity) {
+                        long replyId = (long) ivReply.getTag();
                         String userReply = String.format("%s", tvScreenName.getText().toString());
-                        ((TimelineActivity) mContext).composeTweet(userReply);
+                        ((TimelineActivity) mContext).replyTweet(replyId, userReply);
                     }
                 }
             });
