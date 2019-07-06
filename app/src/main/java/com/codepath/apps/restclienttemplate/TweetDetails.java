@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.restclienttemplate.models.ProfileActivity;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -128,6 +130,15 @@ public class TweetDetails extends AppCompatActivity {
                         }
                     });
                 }
+            }
+        });
+
+        tvUserName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TweetDetails.this, ProfileActivity.class);
+                i.putExtra("user_details", Parcels.wrap(tweet.user));
+                startActivity(i);
             }
         });
     }

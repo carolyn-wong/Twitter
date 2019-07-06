@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +60,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
         holder.tvCreatedAt.setText(tweet.getCreatedAt());
         holder.ivReply.setTag(tweet.uid);
 
-        // TODO - get better resolution images by changing image link from "normal" to "bigger"
         Glide.with(context)
                 .load(tweet.user.profileImageUrl)
                 .bitmapTransform(new RoundedCornersTransformation(context, 10, 0))
@@ -108,18 +106,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder>{
                         String userReply = String.format("%s", tvScreenName.getText().toString());
                         ((TimelineActivity) mContext).replyTweet(replyId, userReply);
                     }
-                }
-            });
-            ivLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("TIMELINE LIKE CLICK", "LIKE");
-                }
-            });
-            ivRetweet.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("TIMELINE RETWEET CLICK", "RETWEET");
                 }
             });
         }
