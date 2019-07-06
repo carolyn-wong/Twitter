@@ -47,5 +47,4 @@ public class User {
         String formattedCreatedAt = TimeFormatter.getTimeDifference(createdAt);
         return formattedCreatedAt;
     }
-
 }

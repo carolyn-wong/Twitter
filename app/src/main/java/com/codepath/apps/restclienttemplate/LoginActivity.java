@@ -32,7 +32,6 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		});
 	}
 
-
 	// Inflate the menu; this adds items to the action bar if it is present.
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,5 +61,4 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	public void loginToRest(View view) {
 		getClient().connect();
 	}
-
 }
