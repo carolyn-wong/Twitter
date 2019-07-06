@@ -1,10 +1,11 @@
-package com.codepath.apps.restclienttemplate.models;
+package com.codepath.apps.restclienttemplate;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.models.User;
 
 import org.parceler.Parcels;
 
