@@ -4,7 +4,7 @@ SimpleTweets is an Android app that implements basic Twitter functionalities.
 
 Submitted by: Carolyn Wong
 
-Time spent: 6 hours spent in total
+Time spent: 20+? hours spent in total
 
 ## User Stories
 
@@ -21,18 +21,12 @@ The following **stretch** features are implemented:
 * [x] When any background or network task is happening, user sees an indeterminate progress indicator.
 * [x] User can "reply" to any tweet from their home timeline. The user that wrote the original tweet is automatically "@" replied in compose.
 * [x] User can click on a tweet to be taken to a "detail view" of that tweet. User can take favorite (and unfavorite) or reweet actions on a tweet.
-* [ ] User can see embedded image media within a tweet on list or detail view.
 * [x] User can view more tweets as they scroll with infinite pagination. Number of tweets is unlimited. Refer to the infinite pagination conceptual guide for more details.
-* [ ] Compose activity is replaced with a modal overlay.
 * [x] Links in tweets are clickable and will launch the web browser.
 * [x] Use Parcelable instead of Serializable leveraging the popular Parceler library.
-* [ ] Replace all icon drawables and other static image assets with vector drawables where appropriate.
-* [ ] User can view following / followers list through any profile they view.
-* [ ] Apply the popular ButterKnife annotation library to reduce view boilerplate.
-* [ ] Experiment with fancy scrolling effects on the Twitter profile view.
-* [ ] User can open the twitter app offline and see last loaded tweets persisted into SQLite.
 
 The following **additional** features are implemented:
+* [x] User can view details of any profile they view (location, # of friends/followers, etc).
 
 
 ## Video Walkthrough
